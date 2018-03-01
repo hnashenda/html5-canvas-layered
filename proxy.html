@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.7.17/fabric.min.js"></script>
+	<!--script src="https://98a70d54.ngrok.io/static/dist/Filesaver.min.js"></script-->
+	
+	
+	
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--the proxy page: hi {{user}}!
+the domain: {{shop.domain}}-->
+
+
+<!--input type="file" id="imgLoader"-->
+<input type="file" id="imageLoader" name="imageLoader"/>
+<input id="fname" type="submit" name="save" value="Save Image"/>
+<!--input id="create" name="username" type="button" onclick="window.location.href='/home/'" value="Create Product"/-->
+<input id="create" name="username" type="submit"  name="create" value="Create Product"/>
+
+<!--input type="text" name="username" class="form-control"
+                                      placeholder="Desired Username" /-->
+<canvas id="canvas" width="300" height="300"></canvas>
+<br/>
+<button id="zoomin">+</button>
+<button id="zoomout">-</button>
+
+    
+    <script>
+	
+	
+		
+		//$("#create").click(function(){
+			//$("#canvas").get(0).toBlob(function(){
+			//	saveAs(blob,"MyImg.png");
+			//});
+			//create();
+		//});
+	
+	
+		//pure javascript
+		var pathname = window.location.pathname;
+		//var path = window.location+'.json';
+		var path = window.location+'';
+		
+		var path_new = encodeURIComponent(path);
+		// to show it in an alert window
+		//alert(path);
+		//hubert(path);
+		
+		var Y = "handle="
+
+		var X = "https://testhuber.myshopify.com/products/iota"
+			
+		//alert(path);
+		
+		the_product = path.split(Y).pop();
+		
+		//var the_json = '/products/'+the_product+'.js';
+		var the_json = 'https://testhuber.myshopify.com/products/iota.js';
+		//alert("on canvas "+the_product+" and the new link "+the_json);
+	
+		var the_image;
+		var canvas,
+			canvasOriginalWidth = 800,
+            canvasOriginalHeight = 600,
+            canvasWidth = 800,
+            canvasHeight = 600,
+            imgWidth,
+            imgHeight,
+            bgImage,
+            canvasScale = 1,
+            photoUrlLandscape = 'https://images8.alphacoders.com/292/292379.jpg';
+            //photoUrlPortrait = 'https://presspack.rte.ie/wp-content/blogs.dir/2/files/2015/04/AMC_TWD_Maggie_Portraits_4817_V1.jpg';
+		
+		$.getJSON(the_json, function(product) {
+		the_image = product.featured_image;
+		//  alert('The title of this product is ' + product.title+' the image is '+product.featured_image);
+		  //return the_image;
+		  
+			
+			
+			// the product image
+			photoUrlPortrait = product.featured_image;
+		
+			
+ 	
+			
+			//canvas = new fabric.Canvas('canvas');
+			var imageLoader = document.getElementById('imageLoader');
+			imageLoader.addEventListener('change', handleImage, false);
+			
+			canvas = document.getElementById('canvas');
+			var context = canvas.getContext('2d');
+			/* context.moveTo(20, 20);
+			context.lineTo(100, 20);
+			context.fillStyle = "#999";
+			context.beginPath();
+			context.arc(100, 100, 75, 0, 2 * Math.PI);
+			context.fill();
+			context.fillStyle = "orange";     
+			context.fillRect(20, 20, 50, 50);
+			context.font = "24px Helvetica";
+			context.fillStyle = "#000";
+			context.fillText("Canvas", 50, 130);*/
+			
+			//var background = new Image();
+			// Create an image element
+			var img = document.createElement('IMG');
+			var background = document.createElement('IMG');
+			// When the image is loaded, draw it
+		//	img.onload = function () {
+		//		context.drawImage(img, 0, 0);
+			//}
+			//img.src = "https://cdn.shopify.com/s/files/1/2032/5807/products/2.png?v=1495665877";
+			//background.src = "http://www.samskirrow.com/background.png";
+			//background.src = photoUrlPortrait;
+			//console.log("the background "+background.src);
+			//context.drawImage(background, 0, 0);
+			//context.style.background="url(".photoUrlPortrait.")";
+			// Make sure the image is loaded first otherwise nothing will draw.
+			//background.onload = function(){
+			//context.drawImage(background,0,0);   
+			//}​
+			function handleImage(e){
+				//var reader = new FileReader();
+				console.log("inside this mofo");
+				reader.onload = function(event){
+					//var imgtop = new Image();
+					//var imgtop = document.createElement('IMG');
+					//imgtop.onload = function(){
+						//canvas.width = img.width;
+						//canvas.height = img.height;
+						
+						console.log("inside the g caome on " +imgtop);
+					//	context.drawImage(imgtop,0,0);
+					//}
+				//	imgtop.src = event.target.result;
+				}
+				reader.readAsDataURL(e.target.files[0]);     
+			}
+			
+			
+		/*function handleImage(e){
+			var reader = new FileReader();
+			reader.onload = function(event){
+				//var imgtop = new Image();
+				var imgtop = document.createElement('IMG');
+				imgtop.onload = function(){
+					//canvas.width = img.width;
+					//canvas.height = img.height;
+					
+					console.log("inside the g caome on " +imgtop);
+					context.drawImage(imgtop,0,0);
+				}
+				imgtop.src = event.target.result;
+			}
+			reader.readAsDataURL(e.target.files[0]);     
+		}*/
+	
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		$("#fname").click(function(canvas){
+			//$("#canvas").get(0).toBlob(function(){
+			//	saveAs(blob,"MyImg.png");
+			//});
+			save();
+			//convertCanvasToImage(canvas);
+		});	
+			
+			
+			 setCanvasZoom();
+
+            $('#zoomin').click(function () {
+                canvasScale *= 1.25;
+                scaleAndPositionImage();
+            });
+            $('#zoomout').click(function () {
+                canvasScale /= 1.25;
+                scaleAndPositionImage();
+            });
+		
+			canvas.setBackgroundImage(product.featured_image, canvas.renderAll.bind(canvas), {
+				backgroundImageOpacity: 0.5,	
+				backgroundImageStretch: false
+			});
+				
+			setCanvasSize({ height: canvasHeight, width: canvasWidth });
+
+            setTimeout(function () {
+               // setCanvasBackgroundImageUrl(photoUrlLandscape, 0, 0, 1)
+            }, 50)
+            setTimeout(function () {
+//setCanvasBackgroundImageUrl(photoUrlPortrait, 0, 0, 1)
+            }, 6000)	
+
+				
+			/*var rect = new fabric.Rect({
+				top : 100,
+				left : 100,
+				width : 60,
+				height : 70,
+				fill : 'red'
+			});
+
+			canvas.add(rect);*/	
+		  
+			document.getElementById('imgLoader').addEventListener("change", function (e) {
+  var file = e.target.files[0];
+  var reader = new FileReader();
+  reader.onload = function (f) {
+    var data = f.target.result;                    
+    fabric.Image.fromURL(data, function (img) {
+      var oImg = img.set({left: 0, top: 0, angle: 00,width:100, height:100}).scale(0.9);
+      canvas.add(oImg).renderAll();
+      var a = canvas.setActiveObject(oImg);
+      var dataURL = canvas.toDataURL({format: 'png', quality: 0.8});
+    });
+  };
+  reader.readAsDataURL(file);
+});
+		  
+		  
+		  
+		  
+		  
+		} );
+		// Converts canvas to an image
+		function convertCanvasToImage(canvas) {
+			var image = new Image();
+			var can = document.getElementsByTagName("canvas");
+			var src = toDataURL("image/png");
+			image.src=	canvas.toDataURL("image/png");
+			console.log('earings '+image.src);			//image.src=	can.toDataURL("image/png");
+			//image.src = canvas.toDataURL("image/png");
+			//return image;
+		}
+		/*function save(){
+			var img = new Image();
+			img.setAttribute('crossOrigin', 'anonymous');
+			img.src = canvas.toDataURL("image/png");
+			console.log("saving........"+img.src);
+			//img.src = URL;
+			
+			//img.onload = function() {
+				//var dataURL = canvas.toDataURL("image/png");
+				//var canvasData = canvas.toDataURL("image/png");
+			//console.log('the dataurl'+dataUrl);
+			//};	
+		}*/
+		function save (){
+			var filename = document.getElementById("fname").value;
+			//var data = JSON.stringify(canvas_data);'
+			var image = new Image();
+			//var timestamp = new Date().getTime();
+			image.setAttribute('crossOrigin', 'anonymous');
+			image.crossOrigin = "Anonymous";
+			var can = document.getElementById('canvas');
+//var ctx = can.getContext('2d');
+
+//ctx.fillRect(50,50,50,50);
+
+			//var img = new Image();
+			//image.src = can.toDataURL();
+			///image.src = can.toDataURL() + '?' + timestamp;
+			//image.src = can.toBlob();
+			
+//img.setAttribute('crossOrigin', 'anonymous');
+
+			//image.src = ctx.canvas.toDataURL("image/png");	
+			//image.src = canvas.toDataURL();	
+			//dataUrl = canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, '')
+			//var dataJSON = canvas.toJSON();
+			//dataUrl = JSON.stringify(dataJSON);
+			//console.log(JSON.stringify(dataJSON));
+			 //img.crossOrigin="anonymous"
+			 //var dataURL = canvas.toDataURL();
+			 //var data = JSON.stringify(canvas_data);
+			 var image = canvas.toDataURL();
+    
+			//$.post("/", { save_fname: filename, save_cdata: data, save_image: image });
+			 
+			//$.post("/save", { save_fname: filename, save_cdata: data });
+			$.post("https://340d0e80.ngrok.io/proxy", { save_fname: "filename", save_image: image,csrfmiddlewaretoken: '{{ csrf_token }}' });
+			
+			/*$.ajax({
+                url: "https://340d0e80.ngrok.io/proxy",
+                type: "POST",
+				//jsonp: 'json',
+				//async:  false,
+				crossDomain : true,
+                //dataType: "json",
+				//contentType:"application/json",
+				
+                data: {
+                    url: products,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(json) {
+                    alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+			
+			*/
+			
+			//alert(filename + " saved");
+			alert("saved");
+			 
+		} 
+		
+		function create(){
+			
+					var pathname = window.location.pathname;
+					//var path = window.location+'.json';
+					var path = window.location+'';
+					
+					
+					//var s = '/Controller/Action?id=11112&value=4444';
+					//s = s.substring(0, s.indexOf('id'));
+					var path_new = path.substring(0, path.indexOf('/apps'));
+					// to show it in an alert window
+					//alert(path);
+					//hubert(path);
+					
+					//var Y = "handle="
+			
+					var products='{ "product":{"title":" Custom Freestyle 151", "body_html":"<strong>Good snowboard!<\/strong>","vendor":"Burton","product_type":"Snowboard","variants":[{"option1":"First","price":"100","sku":"123"},{"option1":"Second","price":"110","sku":"124"}]}}';
+					
+					/*{
+					  "product": {
+						"title": "Burton Custom Freestyle 151",
+						"body_html": "<strong>Good snowboard!<\/strong>",
+						"vendor": "Burton",
+						"product_type": "Snowboard",
+						"variants": [
+						  {
+							"option1": "First",
+							"price": "10.00",
+							"sku": "123"
+						  },
+						  {
+							"option1": "Second",
+							"price": "20.00",
+							"sku": "123"
+						  }
+						]
+					  }
+					};*/
+				 
+				 
+				 
+				 
+				
+				 var myUrl = path_new+'/admin/products.json';
+				 
+				  console.log("Selected Account: "+products);
+				  console.log("THe new path: "+myUrl);
+					var new_product = JSON.parse(products);
+					
+			/*	 $.ajax({
+					 url: myUrl,
+					 type: "POST",
+					 data: new_product,
+					 dataType: "json",
+					 //contentType: "application/json"
+					 
+						})
+					 .done(function (data) {
+					 console.log("Response " + JSON.stringify(data));
+					 }).fail(function(data) {
+    alert( "error"+data );
+  })
+  .always(function() {
+    alert( "finished" );
+  });*/
+				
+
+				//var url = data.result.docs[i].source.enriched.url.url;
+       
+            $.ajax({
+                url: "https://340d0e80.ngrok.io/proxy",
+                type: "POST",
+				//jsonp: 'json',
+				//async:  false,
+				crossDomain : true,
+                //dataType: "json",
+				//contentType:"application/json",
+				
+                data: {
+                    url: products,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                success : function(json) {
+                    alert("Successfully sent the URL to Django");
+                },
+                error : function(xhr,errmsg,err) {
+                    alert("Could not send URL to Django. Error: " + xhr.status + ": " + xhr.responseText);
+                }
+            });
+			
+			
+
+				
+			
+		}
+		
+		function setCanvasSize(canvasSizeObject) {
+            canvas.setWidth(canvasSizeObject.width);
+            canvas.setHeight(canvasSizeObject.height);
+        }
+
+        function setCanvasZoom() {
+            canvasWidth = canvasOriginalWidth * canvasScale;
+            canvasHeight = canvasOriginalHeight * canvasScale;
+
+            canvas.setWidth(canvasWidth);
+            canvas.setHeight(canvasHeight);
+        }
+
+        function setCanvasBackgroundImageUrl(url) {
+            if (url && url.length > 0) {
+                fabric.Image.fromURL(url, function (img) {
+                    bgImage = img;
+                    scaleAndPositionImage();
+                });
+            } else {
+                canvas.backgroundImage = 0;
+                canvas.setBackgroundImage('', canvas.renderAll.bind(canvas));
+
+                canvas.renderAll();
+            }
+        }
+
+        function scaleAndPositionImage() {
+            setCanvasZoom();
+
+            var canvasAspect = canvasWidth / canvasHeight;
+            var imgAspect = bgImage.width / bgImage.height;
+            var left, top, scaleFactor;
+
+            if (canvasAspect >= imgAspect) {
+                var scaleFactor = canvasWidth / bgImage.width;
+                left = 0;
+                top = -((bgImage.height * scaleFactor) - canvasHeight) / 2;
+            } else {
+                var scaleFactor = canvasHeight / bgImage.height;
+                top = 0;
+                left = -((bgImage.width * scaleFactor) - canvasWidth) / 2;
+
+            }
+	
+			canvas.setBackgroundImage(bgImage, canvas.renderAll.bind(canvas), {
+                top: top,
+                left: left,
+                originX: 'left',
+                originY: 'top',
+                scaleX: scaleFactor,
+                scaleY: scaleFactor
+            });
+            canvas.renderAll();
+
+        }
+		//alert("thoe outer image "+the_image);
+		
+        
+   
+   
+
+        
+    </script>
+
+
+
+
+
+
+</body>
+</html>
+
